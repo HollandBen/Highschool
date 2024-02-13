@@ -5,23 +5,32 @@
 #importations
 import random
 
-#decides if the first ship will be placed South (0) or East (1)
-ship_direction_1 = random.randint(0,1)
-
-#decides if the second ship will be placed South (0) or East (1)
-ship_direction_2 = random.randint(0,1)
-
 #determine the x and y coordinates of the ship starters
-x_value_1 = random.randint(0,4)
-y_value_1 = random.randint(0,4)
-
-x_value_2 = random.randint(0,4)
-y_value_2 = random.randint(0,4)
+while True:
+    x_value_1 = random.randint(0,4)
+    y_value_1 = random.randint(0,4)
+    ship_direction_1 = random.randint(0,1)
+    ship_head_1 = [x_value_1, y_value_1]
+    if ship_direction_1 != 0 and y_value_1 != 4: #prevents from spawning in a bad spot at bottom of board
+        break
+    
+while True:
+    while True:
+        x_value_2 = random.randint(0,4)
+        y_value_2 = random.randint(0,4)
+        ship_direction_2 = random.randint(0,1)
+        ship_head_2 = [x_value_2, y_value_2]
+        if ship_direction_2 != 0 or y_value_2 != 4: #prevents from spawning in a bad spot at bottom of board
+            break
+    if ship_head_2 != ship_head_1:
+            break
 
 #starting values
 shots_remaining = 15
+shots_hit = 0
+shots_missed = 0
 
-#2D array of battleship grid
+#2D array of battleship grid for player
 grid = [
     [" A1", "A2", "A3", "A4", "A5"],
     [" B1", "B2", "B3", "B4", "B5"],
@@ -43,6 +52,12 @@ print(border)
 print(" | ".join(grid[4]))
 print()
 
+
+
+
+
+
+
 #print bottom messages to player (shots remaining and next shot)
 print("You have " + str(shots_remaining) + " shots remaining.")
 print()
@@ -50,10 +65,12 @@ x_input = int(input("Enter the x coordinate (1-5) of your next shot: ")) #needs 
 if x_input >= 1 and x_input <= 5:
     print()
 else:
-    print("Please input valid coordinates.")
+    print("Please enter a valid coordinate.")
+x_input = x_input -1
 
 y_input = input("Enter the y coordinate (A-E) of your next shot: ").capitalize()
 if y_input != "A" and y_input != "B" and y_input != "C" and y_input != "D" and y_input != "E": #needs to be looped so it doesnt continue after fail
     print("Please enter a valid coordinate.")
 else:
     print("yay")
+#come back and turn y letters into y numbers
