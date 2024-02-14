@@ -61,16 +61,23 @@ print()
 #print bottom messages to player (shots remaining and next shot)
 print("You have " + str(shots_remaining) + " shots remaining.")
 print()
-x_input = int(input("Enter the x coordinate (1-5) of your next shot: ")) #needs to be looped so it doesnt continue after fail
-if x_input >= 1 and x_input <= 5:
-    print()
-else:
-    print("Please enter a valid coordinate.")
-x_input = x_input -1
-
-y_input = input("Enter the y coordinate (A-E) of your next shot: ").capitalize()
-if y_input != "A" and y_input != "B" and y_input != "C" and y_input != "D" and y_input != "E": #needs to be looped so it doesnt continue after fail
-    print("Please enter a valid coordinate.")
-else:
-    print("yay")
+while True:
+    x_input_check = input("Enter the x coordinate (1-5) of your next shot: ")
+    if x_input_check.isdigit(): #will check to make sure the player did a proper integer input
+        x_input = int(x_input_check) #now sets the x_input to be the good value
+        if x_input >= 1 and x_input <= 5: #make sure in good range
+            x_input = x_input -1
+            print()
+            break
+        else:
+            print("Please enter a valid coordinate.")
+    else:
+        print("Please enter a valid coordinate.")
+while True:
+    y_input = input("Enter the y coordinate (A-E) of your next shot: ").capitalize()
+    if y_input != "A" and y_input != "B" and y_input != "C" and y_input != "D" and y_input != "E": #needs to be looped so it doesnt continue after fail
+        print("Please enter a valid coordinate.")
+    else:
+        
+        break
 #come back and turn y letters into y numbers
