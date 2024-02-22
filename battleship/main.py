@@ -2,24 +2,31 @@
 #Date: 6 Feb 2024
 #Battleship project
 
+#to do:
+#make a hiddden grid 
+#compare hiddent grid to visible grid
+#make the program run in order correctly
+
+
+
 #importations
 import random
 global shots_hit, shots_remaining, start_game
 
 #starting message and prompt to play the game
+start_game = False
 def starting_message():
     start_game = False
     while start_game == False:
         print("Welcome to Battleship! \nYou are an elite commander tasked with sinking the two enemy ships that are hiding somewhere in the ocean. Every turn, submit coordinates to send an artillery shot towards the enemy. However, the allied supply lines were cut, and you only have 15 artillery shots to sink the enemy. \nIf your shot hits an enemy battleship, an x will appear, but if you miss, an o will appear.")
         startup = input("Press 1 to start the game: ")
         if startup.isdigit(): #will check to make sure the player did a proper integer input
-            commence = int(startup) #
+            commence = int(startup)
             if commence == 1:
                 start_game = True
                 break
 
 #determine the x and y coordinates of the ship starters
-
 while True:
     x_value_1 = random.randint(0,4)
     y_value_1 = random.randint(0,4)
@@ -45,7 +52,7 @@ while True:
         if ship_direction_2 == 0 and y_value_2 < 4: #as above
             ship_tail_2 = [x_value_2, y_value_2 +1]
             break
-    if ship_head_2 != ship_head_1 and ship_tail_2 != ship_tail_1:
+    if ship_head_2 != ship_head_1 and ship_tail_2 != ship_tail_1 and ship_head_2 != ship_tail_1 and ship_tail_2 != ship_head_1:
         break
 
 #starting values
@@ -58,13 +65,20 @@ if shots_hit == 4:
 shots_missed = 0
 
 #2D array of battleship grid for player #print grid and borders to player
+grid = [
+        [" A1", "B1", "C1", "D1", "E1"],
+        [" A2", "B2", "C2", "D2", "E2"],
+        [" A3", "B3", "C3", "D3", "E3"],
+        [" A4", "B4", "C4", "D4", "E4"],
+        [" A5", "B5", "C5", "D5", "E5"]
+    ]
 def grid_printing():
     grid = [
-        [" A1", "A2", "A3", "A4", "A5"],
-        [" B1", "B2", "B3", "B4", "B5"],
-        [" C1", "C2", "C3", "C4", "C5"],
-        [" D1", "D2", "D3", "D4", "D5"],
-        [" E1", "E2", "E3", "E4", "E5"]
+        [" A1", "B1", "C1", "D1", "E1"],
+        [" A2", "B2", "C2", "D2", "E2"],
+        [" A3", "B3", "C3", "D3", "E3"],
+        [" A4", "B4", "C4", "D4", "E4"],
+        [" A5", "B5", "C5", "D5", "E5"]
     ]
     border = "----+----+----+----+----"
 
@@ -87,7 +101,7 @@ def player_menu():
         print("You have " + str(shots_remaining) + " shots remaining.")
         print()
         while True:
-            x_input_check = input("Enter the x coordinate (1-5) of your next shot: ")
+            x_input_check = input("Enter the vertical coordinate (1-5) of your next shot: ")
             if x_input_check.isdigit(): #will check to make sure the player did a proper integer input
                 x_input = int(x_input_check) #now sets the x_input to be the good value
                 if x_input >= 1 and x_input <= 5: #make sure in good range
@@ -107,16 +121,30 @@ def player_menu():
         "E" : 4
         }
         while True:
-            y_input_check = input("Enter the y coordinate (A-E) of your next shot: ").capitalize()
+            y_input_check = input("Enter the horizontal coordinate (A-E) of your next shot: ").capitalize()
             if y_input_check != "A" and y_input_check != "B" and y_input_check != "C" and y_input_check != "D" and y_input_check != "E": #needs to be looped so it doesnt continue after fail
                 print("Please enter a valid coordinate.")
             else:
-                y_value = y_input_key[y_input_check]
-                shots_remaining -= 1 #this does not work right now
+                y_input = y_input_key[y_input_check]
+                shots_remaining =- 1
                 break
+        shot_coordinate = [x_input, y_input]
+        if shot_coordinate == ship_head_1:
+            grid[x_input][y_input] ="x "
+        elif shot_coordinate == ship_tail_1:
+            grid[x_input][y_input] ="x "
+        elif shot_coordinate == ship_head_2:
+            grid[x_input][y_input] ="x "
+        elif shot_coordinate == ship_tail_2:
+            grid[x_input][y_input] ="x "
+        else:
+            grid[x_input][y_input] ="o "
+        
             
     #come back to add code that prevents you from firing on the same spot
-starting_message()    
-ship_creation()
-grid_printing()
-player_menu()
+while True:
+    if start_game == False:
+        starting_message()    
+    if start_game == True:
+        grid_printing()
+        player_menu()
