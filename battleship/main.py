@@ -4,55 +4,9 @@
 
 #to do:
 # cannot place the shot in the same spot twice
-# do restart command
-
-
 
 #importations
 import random
-
-
-#starting message and prompt to play the game
-start_game = False
-def starting_message():
-    start_game = False
-    while start_game == False:
-        print("Welcome to Battleship! \nYou are an elite commander tasked with sinking the two enemy ships that are hiding somewhere in the ocean. Every turn, submit coordinates to send an artillery shot towards the enemy. However, the allied supply lines were cut, and you only have 15 artillery shots to sink the enemy. \nIf your shot hits an enemy battleship, an 'x' will appear, but if you miss, an 'o' will appear.")
-        startup = input("Press 1 to start the game: ")
-        if startup.isdigit(): #will check to make sure the player did a proper integer input
-            commence = int(startup)
-            if commence == 1:
-                start_game = True
-                break
-
-#determine the x and y coordinates of the ship starters
-while True:
-    x_value_1 = random.randint(0,4)
-    y_value_1 = random.randint(0,4)
-    ship_direction_1 = random.randint(0,1) #0 is south, 1 is east
-    ship_head_1 = [x_value_1, y_value_1] #vertical, horizontal
-    if ship_direction_1 == 1 and y_value_1 < 4: # if east ship and not on right border, create tail
-        ship_tail_1 = [x_value_1, y_value_1 +1]
-        break
-    if ship_direction_1 == 0 and x_value_1 < 4: # if south ship and not on bottom border, create tail
-        ship_tail_1 = [x_value_1 +1, y_value_1]
-        break
-        #above and below currently have errors, it can spawn on border still
-    
-while True:
-    while True:
-        x_value_2 = random.randint(0,4)
-        y_value_2 = random.randint(0,4)
-        ship_direction_2 = random.randint(0,1) #0 is south, 1 is east
-        ship_head_2 = [x_value_2, y_value_2]
-        if ship_direction_2 == 1 and y_value_2 < 4: #as above
-            ship_tail_2 = [x_value_2, y_value_2 +1]
-            break
-        if ship_direction_2 == 0 and x_value_2 < 4: #as above
-            ship_tail_2 = [x_value_2 +1, y_value_2]
-            break
-    if ship_head_2 != ship_head_1 and ship_tail_2 != ship_tail_1 and ship_head_2 != ship_tail_1 and ship_tail_2 != ship_head_1:
-        break
 
 #starting values
 shots_remaining = 15
@@ -76,18 +30,63 @@ ship_grid = [
         ["A5", "B5", "C5", "D5", "E5"]
     ]
 
-#assigns an x to the hidden grid at a ship's location
-ship_grid[x_value_1][y_value_1] = "x "
-if ship_direction_1 == 0:
-    ship_grid[x_value_1 +1][y_value_1] = "x "
-else:
-    ship_grid[x_value_1][y_value_1 +1] = "x "
 
-ship_grid[x_value_2][y_value_2] = "x "
-if ship_direction_2 == 0:
-    ship_grid[x_value_2 +1][y_value_2] = "x "
-else:
-    ship_grid[x_value_2][y_value_2 +1] = "x "
+#starting message and prompt to play the game
+start_game = False
+def starting_message():
+    start_game = False
+    while start_game == False:
+        print("Welcome to Battleship! \nYou are an elite commander tasked with sinking the two enemy ships that are hiding somewhere in the ocean. Every turn, submit coordinates to send an artillery shot towards the enemy. However, the allied supply lines were cut, and you only have 15 artillery shots to sink the enemy. \nIf your shot hits an enemy battleship, an 'x' will appear, but if you miss, an 'o' will appear.")
+        startup = input("Press 1 to start the game: ")
+        if startup.isdigit(): #will check to make sure the player did a proper integer input
+            commence = int(startup)
+            if commence == 1:
+                start_game = True
+                break
+
+#determine the x and y coordinates of the ship starters
+def ship_startup():
+    global ship_head_1, ship_tail_1, ship_head_2, ship_tail_2
+    while True:
+        x_value_1 = random.randint(0,4)
+        y_value_1 = random.randint(0,4)
+        ship_direction_1 = random.randint(0,1) #0 is south, 1 is east
+        ship_head_1 = [x_value_1, y_value_1] #vertical, horizontal
+        if ship_direction_1 == 1 and y_value_1 < 4: # if east ship and not on right border, create tail
+            ship_tail_1 = [x_value_1, y_value_1 +1]
+            break
+        if ship_direction_1 == 0 and x_value_1 < 4: # if south ship and not on bottom border, create tail
+            ship_tail_1 = [x_value_1 +1, y_value_1]
+            break
+            #above and below currently have errors, it can spawn on border still
+        
+    while True:
+        while True:
+            x_value_2 = random.randint(0,4)
+            y_value_2 = random.randint(0,4)
+            ship_direction_2 = random.randint(0,1) #0 is south, 1 is east
+            ship_head_2 = [x_value_2, y_value_2]
+            if ship_direction_2 == 1 and y_value_2 < 4: #as above
+                ship_tail_2 = [x_value_2, y_value_2 +1]
+                break
+            if ship_direction_2 == 0 and x_value_2 < 4: #as above
+                ship_tail_2 = [x_value_2 +1, y_value_2]
+                break
+        if ship_head_2 != ship_head_1 and ship_tail_2 != ship_tail_1 and ship_head_2 != ship_tail_1 and ship_tail_2 != ship_head_1:
+            break
+
+    #assigns an x to the hidden grid at a ship's location
+    ship_grid[x_value_1][y_value_1] = "x "
+    if ship_direction_1 == 0:
+        ship_grid[x_value_1 +1][y_value_1] = "x "
+    else:
+        ship_grid[x_value_1][y_value_1 +1] = "x "
+
+    ship_grid[x_value_2][y_value_2] = "x "
+    if ship_direction_2 == 0:
+        ship_grid[x_value_2 +1][y_value_2] = "x "
+    else:
+        ship_grid[x_value_2][y_value_2 +1] = "x "
 
 def grid_printing():
     print()
@@ -121,14 +120,17 @@ def player_menu():
     print(f"You have {shots_remaining} shots remaining.")
     print()
     while True:
-        x_input_check = input("Enter the vertical coordinate (1-5) of your next shot: ").capitalize().strip()
+        x_input_check = input("Enter the vertical coordinate (1-5) of your next shot: ")
         if x_input_check.isdigit(): #will check to make sure the player did a proper integer input
             x_input = int(x_input_check) #now sets the x_input to be the good value
-        elif x_input_check == "Q":
-            #do restart
             if x_input >= 1 and x_input <= 5: #make sure in good range
                 x_input = x_input -1
                 break
+            else:
+                print("Please enter a valid coordinate.")
+        elif type(x_input_check) == str:
+            if x_input_check.capitalize().strip() == "Q":
+                do_restart()
             else:
                 print("Please enter a valid coordinate.")
         else:
@@ -147,12 +149,16 @@ def player_menu():
         if y_input_check != "A" and y_input_check != "B" and y_input_check != "C" and y_input_check != "D" and y_input_check != "E" and y_input_check != "Q": #needs to be looped so it doesnt continue after fail
             print("Please enter a valid coordinate.")
         elif y_input_check == "Q":
-            #do restart
+            do_restart()
         else:
             y_input = y_input_key[y_input_check]
             shots_remaining -= 1
             break
+    
     shot_coordinate = [x_input, y_input] #vertical, horizontal
+    if grid[x_input][y_input] == "x " or grid[x_input][y_input] == "o ":
+        shots_remaining += 1
+        player_menu()
     if shot_coordinate == ship_head_1:
         grid[x_input][y_input] ="x "
     elif shot_coordinate == ship_tail_1:
@@ -171,25 +177,47 @@ def ending():
         while True:
             res = input().capitalize().strip()
             if res == "Q":
-                #do restart
+                do_restart()
     else:
         print("You lose! The enemy battleships have survived your 15 shots. Press Q to quit and return to the start.")
         while True:
             res = input().capitalize().strip()
             if res == "Q":
-                #do restart
+                do_restart()
 
-#actual game starts here
-starting_message()    
-for i in range(0, 16):
-    grid_printing()
-    if grid == ship_grid:
-        win = True
-        ending()
-        break
-    if shots_remaining == 0:
-        win = False
-        ending()
-        break
-    else:
-        player_menu()
+#restart game
+def do_restart():
+    global win,grid,ship_grid,border
+    starting_message()
+    grid = [
+        ["A1", "B1", "C1", "D1", "E1"],
+        ["A2", "B2", "C2", "D2", "E2"],
+        ["A3", "B3", "C3", "D3", "E3"],
+        ["A4", "B4", "C4", "D4", "E4"],
+        ["A5", "B5", "C5", "D5", "E5"]
+    ]
+    border = "---+----+----+----+---"
+
+    ship_grid = [
+        ["A1", "B1", "C1", "D1", "E1"],
+        ["A2", "B2", "C2", "D2", "E2"],
+        ["A3", "B3", "C3", "D3", "E3"],
+        ["A4", "B4", "C4", "D4", "E4"],
+        ["A5", "B5", "C5", "D5", "E5"]
+    ]
+    ship_startup()    
+    for i in range(0, 16):
+        grid_printing()
+        if grid == ship_grid:
+            win = True
+            ending()
+            break
+        if shots_remaining == 0:
+            win = False
+            ending()
+            break
+        else:
+            player_menu()
+
+#starts the program 
+do_restart()
