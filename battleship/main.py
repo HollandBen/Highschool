@@ -100,7 +100,9 @@ def grid_printing():
     print(border)
     print(" | ".join(grid[4]))
     print()
-    
+
+#unused, just for debugging
+def unused():
     print()
     print(" | ".join(ship_grid[0]))
     print(border)
@@ -187,7 +189,8 @@ def ending():
 
 #restart game
 def do_restart():
-    global win,grid,ship_grid,border
+    global win,grid,ship_grid,border, shots_remaining
+    shots_remaining = 15
     starting_message()
     grid = [
         ["A1", "B1", "C1", "D1", "E1"],
