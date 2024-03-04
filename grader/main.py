@@ -25,11 +25,12 @@ class_mean = student_list[0][1:]
             #student_list[-1].extend([int((input("Enter a percentage grade: ")))])
 
 #main menu function
+    #change this function to reflect the new student_menu() function
 def main_menu():
     while True:
         print(border)
         print("Main Menu\nEnter 'mean' to receive the class mean or enter a student's number or name to access grade information. To make changes to the class list, enter 'edit'.")
-        call_main_menu = input("Enter input: ").lower().strip()
+        call_main_menu = input("> Enter input: ").lower().strip()
         if call_main_menu == "mean":
             print(f"The mean of the class is: {class_mean} %")
         elif call_main_menu == "edit":
@@ -43,35 +44,57 @@ def main_menu():
             
 #editing the student list function
 def edit_student():
-    print(border)
-    print("Enter 'add' to add a student to the list or enter 'remove' to remove a student from the list.\nPress 'Q' to return to the main menu.")
     while True:
-        edit_student_choice = input("Enter input: ")
+        global student_list, student_list_length
+        student_list_length = len(student_list)
+        print(border)
+        print("Enter 'add' to add a student to the list or enter 'remove' to remove a student from the list.\nEnter 'Q' to return to the main menu.")
+        edit_student_choice = input("> Enter input: ").lower().strip()
     #this loop makes sure that the name is a string, and not a number
         if edit_student_choice == "add":
+            print(border)
+            print("Enter the new student's name.")
             while True:
-                new_student_name = input("Enter the new student's name: ")
+                new_student_name = input("> Enter input: ")
                 if new_student_name.isdigit():
                     print("Invalid name. Please try again.")
+                elif new_student_name.lower().strip() == "q":
+                    break
                 else:
                     new_student_name.strip().capitalize()
+                    print(f"Student '{new_student_name}' was added.")
                     student_list.append([new_student_name])
                     break
         elif edit_student_choice == "remove":
+            print(border)
             print("Enter the student's number to remove them from the list.")
             while True:
-                remove_student = input("Enter input: ")
-                if remove_student.isinstance(str):
-                    print("Invalid student number. Please try again.")
+                remove_student = input("> Enter input: ")
+                if remove_student.isdigit() and int(remove_student) <= student_list_length:
+                    print(f"Student '{student_list[int(remove_student) - 1]}' was removed.")
+                    student_list.pop(int(remove_student) - 1)
+                    break
+                elif remove_student.lower().strip() == "q":
+                    break
                 else:
-                    int(remove_student)
-                    #continue from here tomorrow :)
+                    print("Invalid student number. Please try again.")
         elif edit_student_choice == "q":
-            #something here
+            break
         else:
             print("Invalid choice. Please try again.")
-                
+
+def student_menu():
+    while True:
+        print(border)
+        print("Enter the student's number to access their profile.")
+        student_menu_choice = input("> Enter input: ")
+        if student_menu_choice.isdigit():
+            do something
+        elif student_menu_choice == "q":
+            break
+        else:
+            print("Invalid choice. Please try again.")
             
     
-new_student()
+edit_student()
 print(student_list)
