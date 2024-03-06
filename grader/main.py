@@ -14,10 +14,11 @@ border = "----------------------------------------"
 student_list = [
     ["Alex", 98, 99, 97, 100],
     ["Brett", 64, 73, 50, 0],
+    ["Edith", 40, 65, 39, 57],
     ["Caden", 85, 89, 78, 91],
     ["Danielle", 90, 92, 91, 99]
 ]
-
+student_list.sort()
 
 #come back to the below later
 
@@ -94,6 +95,7 @@ def student_menu():
     while True:
         print(border)
         print("Class list:")
+        student_list.sort()
         for i in range(0, student_list_length):
             print(i + 1, student_list[i][0])
         print("Enter the student's number to access their profile.\nEnter 'Q' to return to the main menu.")
@@ -111,7 +113,9 @@ def student_menu():
                 if individual_choice.strip().lower() == "mean":
                     something
                 elif individual_choice.strip().lower() == "add":
-                    something
+                    print("Enter the new percentage grade to be added.")
+                    new_grade = input("> Enter input: ")
+                    student_list[int(student_menu_choice) - 1].append(new_grade)
                 elif individual_choice.strip().lower() == "remove":
                     something
                 elif individual_choice.strip().lower() == "q":
