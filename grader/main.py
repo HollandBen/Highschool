@@ -4,10 +4,6 @@
 
 #to do:
     #class average function
-    #student menu
-        #adding a new assignment
-        #removing an assignment
-        #getting the student's average
 
 #important variables
 border = "----------------------------------------"
@@ -18,19 +14,7 @@ student_list = [
     ["Caden", 85, 89, 78, 91],
     ["Danielle", 90, 92, 91, 99]
 ]
-student_list.sort()
-
-#come back to the below later
-
 student_list_length = len(student_list)
-#for i in range(student_list_length):
-class_mean = student_list[0][1:]
-#class_mean = class_mean / student_list_length
-#print(round(class_mean, 2))
-
-#student_list.append([new_student_name])
-        #while True:
-            #student_list[-1].extend([int((input("Enter a percentage grade: ")))])
 
 #main menu function
 def main_menu():
@@ -39,7 +23,16 @@ def main_menu():
         print("Main Menu\nEnter 'mean' to receive the class mean or enter 'students' to access grade information. To make changes to the class list, enter 'edit'.")
         call_main_menu = input("> Enter input: ").lower().strip()
         if call_main_menu == "mean":
-            print(f"The mean of the class is: {class_mean} %")
+            
+            #this part is the final(?) part i hope
+            #needs to get the sum of the averages of each student, then finds the average between that
+            
+            
+            #below is raw code from the student average getter
+            class_adder = sum(student_list[int(student_menu_choice) - 1][1:])
+            class_average = student_adder / (assignments_list - 1)
+            print(f"The student's average is: '{round(student_average, 2)}%'.")
+
         elif call_main_menu == "edit":
             edit_student()
         elif call_main_menu == "students":
@@ -52,7 +45,11 @@ def edit_student():
     while True:
         global student_list, student_list_length
         student_list_length = len(student_list)
+        student_list.sort()
         print(border)
+        print("Class list:")
+        for i in range(0, student_list_length):
+            print(i + 1, student_list[i][0])
         print("Enter 'add' to add a student to the list or enter 'remove' to remove a student from the list.\nEnter 'Q' to return to the main menu.")
         edit_student_choice = input("> Enter input: ").lower().strip()
     #this loop makes sure that the name is a string, and not a number
@@ -72,9 +69,6 @@ def edit_student():
                     break
         elif edit_student_choice == "remove":
             print(border)
-            print("Class list:")
-            for i in range(0, student_list_length):
-                print(i + 1, student_list[i][0])
             print("Enter the student's number to remove them from the list.\nEnter 'Q' to return to the student editor menu.")
             while True:
                 remove_student = input("> Enter input: ")
@@ -93,9 +87,8 @@ def edit_student():
 
 def student_menu():
     while True:
-        print(border)
+        global student_average, student_list
         print("Class list:")
-        student_list.sort()
         for i in range(0, student_list_length):
             print(i + 1, student_list[i][0])
         print("Enter the student's number to access their profile.\nEnter 'Q' to return to the main menu.")
@@ -107,17 +100,25 @@ def student_menu():
                 assignments_list = len(student_list[int(student_menu_choice) - 1])
                 print("The recorded grades for this student are:")
                 for i in range(1, assignments_list):
-                    print(f"Assignment {i + 1}: {student_list[int(student_menu_choice) - 1][i]}")
+                    print(f"Assignment {i}: {student_list[int(student_menu_choice) - 1][i]} %")
                 print("Enter 'mean' to get this student's average, enter 'add' to add an assignment's grade to their progile, or enter 'remove' to remove an assignment.\nEnter 'Q' to return to student grade information menu.")
                 individual_choice = input("> Enter input: ")
                 if individual_choice.strip().lower() == "mean":
-                    something
+                    student_adder = sum(student_list[int(student_menu_choice) - 1][1:])
+                    student_average = student_adder / (assignments_list - 1)
+                    print(f"The student's average is: '{round(student_average, 2)} %'.")
                 elif individual_choice.strip().lower() == "add":
                     print("Enter the new percentage grade to be added.")
                     new_grade = input("> Enter input: ")
-                    student_list[int(student_menu_choice) - 1].append(new_grade)
+                    student_list[int(student_menu_choice) - 1].append(round(float(new_grade), 2))
                 elif individual_choice.strip().lower() == "remove":
-                    something
+                    print("Enter the assignment number to be removed.")
+                    delete_grade = input("> Enter input: ")
+                    if int(delete_grade) >= 1 and int(delete_grade) < assignments_list:
+                        print(f"Grade '{student_list[int(student_menu_choice) - 1][int(delete_grade)]}' was removed")
+                        del student_list[int(student_menu_choice) - 1][int(delete_grade)]
+                    else:
+                        print("Invalid choice. Please try again.")
                 elif individual_choice.strip().lower() == "q":
                     break
                 else:
