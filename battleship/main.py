@@ -148,6 +148,7 @@ def player_menu():
     }
     while True:
         y_input_check = input("Enter the horizontal coordinate (A-E) of your next shot: ").capitalize().strip()
+        #if y_input_check not in y_input_key:
         if y_input_check != "A" and y_input_check != "B" and y_input_check != "C" and y_input_check != "D" and y_input_check != "E" and y_input_check != "Q": #needs to be looped so it doesnt continue after fail
             print("Please enter a valid coordinate.")
         elif y_input_check == "Q":
@@ -161,6 +162,7 @@ def player_menu():
     if grid[x_input][y_input] == "x " or grid[x_input][y_input] == "o ":
         shots_remaining += 1
         player_menu()
+    #grid[x_input][y_input]= ship_grid[x_input][y_input]
     if shot_coordinate == ship_head_1:
         grid[x_input][y_input] ="x "
     elif shot_coordinate == ship_tail_1:
