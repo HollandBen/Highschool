@@ -2,13 +2,8 @@
 #28 Feb 2024
 #Student grades program
 
-#to do:
-    #check debugging around the class average function
-        #divisionbyzero error when someone with no assignments is passed through the class average
-    #maybe see if there is a way to add a new grade as a number w a decimal
-
 #important variables
-border = "----------------------------------------"
+border = "----------------------------------------\n"
 student_list = [
     ["Alex", 98, 99, 97, 100, 102],
     ["Brett", 64, 73, 50, 0, 20],
@@ -22,7 +17,7 @@ student_list_length = len(student_list)
 def main_menu():
     while True:
         print(border)
-        print("Main Menu\nEnter 'mean' to receive the class mean or enter 'students' to access grade information. To make changes to the class list, enter 'edit'.")
+        print("Main Menu\nEnter 'mean' to receive the class mean or enter 'students' to access grade information. To make changes to the class list, enter 'edit'.\nEnter 'Q' to exit the program.")
         call_main_menu = input("> Enter input: ").lower().strip()
         
         #command to get the class average
@@ -33,9 +28,12 @@ def main_menu():
                 assignments_list = len(student_list[i])
                 try:
                     class_adder = class_adder / (assignments_list - 1)
+                except ZeroDivisionError:
+                    class_adder = 0
                 class_total += class_adder
             class_average = class_total / student_list_length
-            print(f"The class average is: '{round(class_average, 2)}%'.")
+            print(border)
+            print(f"The class average is: {round(class_average, 2)} %.")
 
         #enter edit class menu
         elif call_main_menu == "edit":
@@ -107,6 +105,7 @@ def edit_student():
 def student_menu():
     while True:
         global student_average, student_list
+        print(border)
         print("Class list:")
         for i in range(0, student_list_length):
             print(i + 1, student_list[i][0])
@@ -126,22 +125,31 @@ def student_menu():
                 individual_choice = input("> Enter input: ")
                 
                 #gets the mean of the student's grades
-                if individual_choice.strip().lower() == "mean" and assignments_list > 1:
+                if individual_choice.strip().lower() == "mean":
                     student_adder = sum(student_list[int(student_menu_choice) - 1][1:])
-                    student_average = student_adder / (assignments_list - 1)
-                    print(f"The student's average is: '{round(student_average, 2)} %'.")
+                    try:
+                        student_average = student_adder / (assignments_list - 1)
+                    except ZeroDivisionError:
+                        student_average = 0
+                    print(border)
+                    print(f"The student's average is: {round(student_average, 2)} %.")
                 
                 #command to add a new assignment to the student's grades (in percent)
                 elif individual_choice.strip().lower() == "add":
+                    print(border)
                     print(r"Enter the new percentage grade to be added. Grades between 0 % and 115 % are accepted.")
                     new_grade = input("> Enter input: ")
-                    if new_grade.isdigit() and float(new_grade) >= 0 and float(new_grade) <= 115:
-                        student_list[int(student_menu_choice) - 1].append(round(float(new_grade), 2))
-                    else:
-                        print("Invalid grade. Please try again.")
+                    try:
+                        if float(new_grade) >= 0 and float(new_grade) <= 115:
+                            student_list[int(student_menu_choice) - 1].append(round(float(new_grade), 2))
+                        else:
+                            print("Invalid grade. Please try again.")
+                    except ValueError:
+                            print("Invalid grade. Please try again.")
                 
                 #command to remove an assignment from the student's grades
                 elif individual_choice.strip().lower() == "remove":
+                    print(border)
                     print("Enter the assignment number to be removed.")
                     delete_grade = input("> Enter input: ")
                     
