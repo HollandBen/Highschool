@@ -22,18 +22,7 @@ def main_menu():
         
         #command to get the class average
         if call_main_menu == "mean":
-            class_total = 0
-            for i in range(0, student_list_length):
-                class_adder = sum(student_list[i][1:])
-                assignments_list = len(student_list[i])
-                try:
-                    class_adder = class_adder / (assignments_list - 1)
-                except ZeroDivisionError:
-                    class_adder = 0
-                class_total += class_adder
-            class_average = class_total / student_list_length
-            print(border)
-            print(f"The class average is: {round(class_average, 2)} %.")
+            class_mean()
 
         #enter edit class menu
         elif call_main_menu == "edit":
@@ -50,7 +39,22 @@ def main_menu():
         #error
         else:
             print("An unexpected value was received. Please try again.")
-            
+
+#simple to get the class mean
+def class_mean():
+    class_total = 0
+    for i in range(0, student_list_length):
+        class_adder = sum(student_list[i][1:])
+        assignments_list = len(student_list[i])
+        try:
+            class_adder = class_adder / (assignments_list - 1)
+        except ZeroDivisionError:
+            class_adder = 0
+        class_total += class_adder
+    class_average = class_total / student_list_length
+    print(border)
+    print(f"The class average is: {round(class_average, 2)} %.")
+
 #editing the student list function
 def edit_student():
     while True:
@@ -145,7 +149,7 @@ def student_menu():
                         else:
                             print("Invalid grade. Please try again.")
                     except ValueError:
-                            print("Invalid grade. Please try again.")
+                        print("Invalid grade. Please try again.")
                 
                 #command to remove an assignment from the student's grades
                 elif individual_choice.strip().lower() == "remove":
