@@ -2,14 +2,6 @@
 #20 March 2024
 #Seaching and sorting assignment
 
-#to do
-    #editing the searching function so that it works with my lists
-        #make sure to sort it first
-        #change the high and low variables
-        #set up an input
-        #maybe enter a seperate function as a menu
-
-
 #important variables
 terms = ["Andy", "Bill", "Cherry", "William", "Nancy", "Bob", "Smith", "Dan", "Gabby", "Sam", 
     "Xander", "Billy", "Tommy", "Lilith", "Hyacinthe"]
@@ -63,7 +55,7 @@ def main():
         print("Please enter 'search' to enter the search bar, or enter 'add' or 'remove' to edit the list of terms. Enter 'Q' to quit the program.")
         call_main = input("> Enter input: ").lower().strip()
         if call_main == "search":
-            pass
+            search()
         elif call_main == "add":
             add()
         elif call_main == "remove":
@@ -73,14 +65,32 @@ def main():
         else:
             print("Invalid input. Please try again.")
 
+#searching the list function and automatically sorts
+def search():
+    global terms, length
+    length = len(terms)
+    while True:
+        print(border)
+        print("Please enter the search term (case sensitive). Enter 'Q' to return to the main menu.")
+        call_search = input("> Enter input: ")
+        if call_search.strip().lower() == "q":
+            break
+        else:
+            selection_sort(terms, length)
+            search_result = binary_search(terms, 0, length - 1, call_search)
+            if search_result == -1:
+                print(f"Term '{call_search}' was not found in the list.")
+            else:
+                print(f"Term '{terms[search_result]}' was found in slot #{search_result + 1}.")
+
 #adding a new term to the list function
 def add():
     global terms
     while True:
         print(border)
         print("Please enter the new term to be added to the list. Enter 'Q' to return to the main menu.")
-        call_add = input("> Enter input: ").strip()
-        if call_add.lower() == "q":
+        call_add = input("> Enter input: ")
+        if call_add.strip().lower() == "q":
             break
         else:
             terms.append(call_add)
