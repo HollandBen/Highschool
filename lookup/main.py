@@ -52,7 +52,7 @@ def binary_search(terms, low, high, wanted):
 def main():
     while True:
         print(border)
-        print("Please enter 'search' to enter the search bar, or enter 'add' or 'remove' to edit the list of terms. Enter 'Q' to quit the program.")
+        print("Main menu\nPlease enter 'search' to enter the search bar, or enter 'add' or 'remove' to edit the list of terms. Enter 'Q' to quit the program.")
         call_main = input("> Enter input: ").lower().strip()
         if call_main == "search":
             search()
@@ -81,7 +81,7 @@ def search():
             if search_result == -1:
                 print(f"Term '{call_search}' was not found in the list.")
             else:
-                print(f"Term '{terms[search_result]}' was found in slot #{search_result + 1}.")
+                print(f"Term '{terms[search_result]}' was found in slot {search_result + 1} of {length}.")
 
 #adding a new term to the list function
 def add():
