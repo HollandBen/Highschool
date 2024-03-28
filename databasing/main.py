@@ -3,8 +3,7 @@
 #Student grades program v2.0 (database ver.)
 
 #to do:
-    #bug test the adding a new student command, make sure it errors properly
-    #the class list needs to update properly after
+    #removing student is not working at the database command
     #give feedback that the student and their grades were added
     #work on commands listed as "NEED FIX"
 
@@ -16,15 +15,14 @@ database.create_table(conn, "Students", ["name 'TEXT'", "assign_1 'REAL'", "assi
 #database.insert_db(conn, "Students", ["name", "assign_1", "assign_2", "assign_3", "assign_4", "assign_5"], ["Danielle", 90, 92, 91, 99, 0])
 #database.update_db(conn, "Students", ["first_name = 'Mester'", "age = '90'"], "id = '1'")
 
-result = database.select_db(conn, "Students").fetchall()
+def fetch():
+    global result, gradebook_list, student_list_length
+    result = database.select_db(conn, "Students").fetchall()
+    gradebook_list = [list(ele) for ele in result]
+    student_list_length = len(gradebook_list)
 
 #important variables
 border = "----------------------------------------\n"
-
-#creates 2d array (now with id)
-gradebook_list = [list(ele) for ele in result]
-
-student_list_length = len(gradebook_list)
 
 #main menu function
 def main_menu():
@@ -55,6 +53,7 @@ def main_menu():
 
 #simple to get the class mean
 def class_mean():
+    fetch()
     class_total = 0
     for i in range(0, student_list_length):
         class_adder = sum(gradebook_list[i][2:])
@@ -72,8 +71,7 @@ def class_mean():
 def edit_student():
     while True:
         global gradebook_list, student_list_length
-        student_list_length = len(gradebook_list)
-        gradebook_list.sort()
+        fetch()
         print(border)
         print("Class list:")
         for i in range(0, student_list_length):
@@ -81,24 +79,24 @@ def edit_student():
         print("Enter 'add' to add a student to the list or enter 'remove' to remove a student from the list.\nEnter 'Q' to return to the main menu.")
         edit_student_choice = input("> Enter input: ").lower().strip()
         
-        #FIX ADDING
+        #FIX ADDING (done?)
         #command for adding a new student to the class list
         if edit_student_choice == "add":
             print(border)
             print("Enter the new student's name.\nEnter 'Q' to return to the student editor menu.")
             breaker = False
             while True:
+                if breaker:
+                    break
                 new_student_name = input("> Enter input: ")
                 if new_student_name.isdigit():
                     print("Invalid name. Please try again.")
                 elif new_student_name.lower().strip() == "q":
                     break
-                elif breaker:
-                    break
                 else:
                     new_student_name.strip().capitalize()
                     print(f"Student '{new_student_name}' was added.")
-                    print("Enter the five assignment grades associated with this student. Use the format: xx, xx, xx, xx, xx\nEnter 'Q' to return to the adding student menu.")
+                    print("Enter the five assignment grades associated with this student. Use the format: xx, xx, xx, xx, xx\nEnter 'Q' to return to the student editor menu.")
                     while True:
                         call_adding_items = input("> Enter input: ")
                         if call_adding_items.lower().strip() == "q":
@@ -106,24 +104,31 @@ def edit_student():
                             break
                         else:
                             try:
+                                trying = call_adding_items.split(", ")
+                                for k in range(5):
+                                    if float(trying[k]) >= 0 and float(trying[k]) <= 115:
+                                        pass
+                                    else:
+                                        raise ValueError
                                 new_grade_1, new_grade_2, new_grade_3, new_grade_4, new_grade_5 = call_adding_items.split(", ")
-                                database.insert_db(conn, "Students", ["name", "assign_1", "assign_2", "assign_3", "assign_4", "assign_5"], [new_student_name, float(new_grade_1), float(new_grade_2), float(new_grade_3), float(new_grade_4), float(new_grade_5)])
-                                #student_list.append([new_student_name])
+                                database.insert_db(conn, "Students", ["name", "assign_1", "assign_2", "assign_3", "assign_4", "assign_5"], [new_student_name, round(float(new_grade_1), 2), round(float(new_grade_2), 2), round(float(new_grade_3), 2), round(float(new_grade_4), 2), round(float(new_grade_5), 2)])
                                 breaker = True
                                 break
-                            except TypeError:
+                            except ValueError or TypeError:
                                 print("Invalid input. Please try again.")
         
         #FIX REMOVING
         #command for removing a student from the class list
         elif edit_student_choice == "remove":
+            fetch()
             print(border)
             print("Enter the student's number to remove them from the list.\nEnter 'Q' to return to the student editor menu.")
             while True:
                 remove_student = input("> Enter input: ")
                 if remove_student.isdigit() and int(remove_student) <= student_list_length and int(remove_student) >= 1:
-                    print(f"Student '{student_list[int(remove_student) - 1][0]}' was removed.")
-                    student_list.pop(int(remove_student) - 1)
+                    print(f"Student '{gradebook_list[int(remove_student) - 1][1]}' was removed.")
+                    #student_list.pop(int(remove_student) - 1)
+                    database.delete_db(conn, "Students", "id", int(remove_student))
                     break
                 elif remove_student.lower().strip() == "q":
                     break
