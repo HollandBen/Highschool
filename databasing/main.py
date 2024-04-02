@@ -75,7 +75,7 @@ def edit_student():
         print(border)
         print("Class list:")
         for i in range(0, student_list_length):
-            print(i + 1, gradebook_list[i][1])
+            print(gradebook_list[i][0], gradebook_list[i][1])
         print("Enter 'add' to add a student to the list or enter 'remove' to remove a student from the list.\nEnter 'Q' to return to the main menu.")
         edit_student_choice = input("> Enter input: ").lower().strip()
         
@@ -95,7 +95,7 @@ def edit_student():
                     break
                 else:
                     new_student_name.strip().capitalize()
-                    print(f"Student '{new_student_name}' was added.")
+                    print(f"Student '{new_student_name}' was accepted.")
                     print("Enter the five assignment grades associated with this student. Use the format: xx, xx, xx, xx, xx\nEnter 'Q' to return to the student editor menu.")
                     while True:
                         call_adding_items = input("> Enter input: ")
@@ -112,12 +112,14 @@ def edit_student():
                                         raise ValueError
                                 new_grade_1, new_grade_2, new_grade_3, new_grade_4, new_grade_5 = call_adding_items.split(", ")
                                 database.insert_db(conn, "Students", ["name", "assign_1", "assign_2", "assign_3", "assign_4", "assign_5"], [new_student_name, round(float(new_grade_1), 2), round(float(new_grade_2), 2), round(float(new_grade_3), 2), round(float(new_grade_4), 2), round(float(new_grade_5), 2)])
+                                fetch()
+                                print(f"Student #{gradebook_list[-1][0]} {new_student_name}, with grades of {new_grade_1} %, {new_grade_2} %, {new_grade_3} %, {new_grade_4} %, and {new_grade_5} % was added to the gradebook.")
                                 breaker = True
                                 break
                             except ValueError or TypeError:
                                 print("Invalid input. Please try again.")
         
-        #FIX REMOVING
+        #FIX REMOVING (needs to update the IDs in the database, otherwise functions will get the wrong person)
         #command for removing a student from the class list
         elif edit_student_choice == "remove":
             fetch()
@@ -125,8 +127,11 @@ def edit_student():
             print("Enter the student's number to remove them from the list.\nEnter 'Q' to return to the student editor menu.")
             while True:
                 remove_student = input("> Enter input: ")
-                if remove_student.isdigit() and int(remove_student) <= student_list_length and int(remove_student) >= 1:
-                    print(f"Student '{gradebook_list[int(remove_student) - 1][1]}' was removed.")
+                
+                
+                #want to change this so that it has to match an id to move forwards, check battleship review
+                if remove_student.isdigit() and int(remove_student) <= gradebook_list[-1][0] and int(remove_student) >= 1:
+                    print(f"Student '{gradebook_list[int(remove_student)][1]}' was removed.")
                     #student_list.pop(int(remove_student) - 1)
                     database.delete_db(conn, "Students", "id", int(remove_student))
                     break
