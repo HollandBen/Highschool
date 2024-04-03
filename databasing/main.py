@@ -127,17 +127,38 @@ def edit_student():
             print("Enter the student's number to remove them from the list.\nEnter 'Q' to return to the student editor menu.")
             while True:
                 remove_student = input("> Enter input: ")
+                if remove_student.lower().strip() == "q":
+                    break
+                for sublist in gradebook_list:
+                    try:
+                        if sublist[0] == int(remove_student):
+                            print(f"Student '{sublist[1]}' was removed.")
+                            #student_list.pop(int(remove_student) - 1)
+                            database.delete_db(conn, "Students", "id", int(remove_student))
+                            break
+                        else:
+                            print("Invalid student number. Please try again.")
+                    except ValueError:
+                        break
+                break
+                    
+                        
                 
                 
-                #want to change this so that it has to match an id to move forwards, check battleship review
-                if remove_student.isdigit() and int(remove_student) <= gradebook_list[-1][0] and int(remove_student) >= 1:
-                    print(f"Student '{gradebook_list[int(remove_student)][1]}' was removed.")
-                    #student_list.pop(int(remove_student) - 1)
-                    database.delete_db(conn, "Students", "id", int(remove_student))
-                    break
-                elif remove_student.lower().strip() == "q":
-                    break
-                else:
+                
+                
+                
+                try:
+                    if any(int(remove_student) in (match := sublist) for sublist in gradebook_list):
+                        print(f"Student '{gradebook_list[match.index(int(remove_student))][1]}' was removed.")
+                        #student_list.pop(int(remove_student) - 1)
+                        database.delete_db(conn, "Students", "id", int(remove_student))
+                        break
+                    elif remove_student.lower().strip() == "q":
+                        break
+                    else:
+                        print("Invalid student number. Please try again.")
+                except IndexError:
                     print("Invalid student number. Please try again.")
         
         #command for exiting the current menu and returning to the main menu
