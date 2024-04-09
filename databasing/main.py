@@ -3,8 +3,9 @@
 #Student grades program v2.0 (database ver.)
 
 #to do:
-    #literally all of the "students" command line
-
+    #update one of the assignments
+        #will probably have to split so follow from the earlier commands
+        
 #database starter
 import database
 conn = database.create_connection("databasing/gradebook.db")
@@ -157,13 +158,15 @@ def student_menu():
         
         #checks to make sure that the student number that was entered is a valid part of the class
         
-        while True:
-            student_menu_choice = input("> Enter input: ")
-            if student_menu_choice.lower().strip() == "q":
-                break
-            try:
-                for sublist in gradebook_list: #checks every student in the class
-                    if sublist[0] == int(student_menu_choice): #checks the id
+        student_menu_choice = input("> Enter input: ")
+        if student_menu_choice.lower().strip() == "q":
+            break
+        
+        
+        try:
+            for sublist in gradebook_list: #checks every student in the class
+                if sublist[0] == int(student_menu_choice): #checks the id
+                    while True:
                         print(border)
                         print(f"Student selected: {sublist[1]}")
                         print("The recorded grades for this student are:")
@@ -182,20 +185,24 @@ def student_menu():
                             print(f"The student's average is: {round(student_average, 2)} %.")
                 
                         elif individual_choice.strip().lower() == "update":
-                            print("Enter the assignment number that should be changed.\nEnter 'Q' to return to student grade information menu.")
+                            print(border)
+                            print("Enter the assignment number that should be changed, followed by the updated grade. Use the format: x, xx\nEnter 'Q' to return to student grade information menu.")
                             updater = input("> Enter input: ")
                             if updater.lower().strip() == "q":
                                 break
                             elif int(updater) >= 1 and int(updater) <= 5:
-                                pass
+                                updater = f"assign_{updater}"
+                                database.update_db(conn, "Students", [f"{updater} = {float(new_grade)}"], f"id = {sublist[0]}")
                             else:
                                 print("Invalid assignment number. Please try again.")
-                break
+                        
+                        elif individual_choice.strip().lower() == "q":
+                            break
                             
                             
-            except ValueError:
-                print("Invalid student number. Please try again.")
-                break
+        except ValueError:
+            print("Invalid student number. Please try again.")
+            break
 
 
 #loop that actually runs the program constantly            
