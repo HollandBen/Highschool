@@ -3,8 +3,8 @@
 #Student grades program v2.0 (database ver.)
 
 #to do:
-    #update one of the assignments
-        #will probably have to split so follow from the earlier commands
+    #okay so update seems to be working, but it will still say that an error occured when you have updated a grade
+    #but also not when you press q... must do some sleuthing here next time
         
 #database starter
 import database
@@ -162,11 +162,11 @@ def student_menu():
         if student_menu_choice.lower().strip() == "q":
             break
         
-        
         try:
             for sublist in gradebook_list: #checks every student in the class
                 if sublist[0] == int(student_menu_choice): #checks the id
                     while True:
+                        fetch()
                         print(border)
                         print(f"Student selected: {sublist[1]}")
                         print("The recorded grades for this student are:")
@@ -187,22 +187,29 @@ def student_menu():
                         elif individual_choice.strip().lower() == "update":
                             print(border)
                             print("Enter the assignment number that should be changed, followed by the updated grade. Use the format: x, xx\nEnter 'Q' to return to student grade information menu.")
-                            updater = input("> Enter input: ")
-                            if updater.lower().strip() == "q":
+                            update_raw = input("> Enter input: ")
+                            updater, new_grade = update_raw.split(", ")
+                            if update_raw.lower().strip() == "q":
                                 break
-                            elif int(updater) >= 1 and int(updater) <= 5:
-                                updater = f"assign_{updater}"
-                                database.update_db(conn, "Students", [f"{updater} = {float(new_grade)}"], f"id = {sublist[0]}")
+                            elif int(updater) >= 1 and int(updater) <= 5 and float(new_grade) >= 0 and float(new_grade) <= 115:
+                                updater_db = f"assign_{updater}"
+                                database.update_db(conn, "Students", [f"{updater_db} = {round(float(new_grade), 2)}"], f"id = {sublist[0]}")
+                                sublist[int(updater) + 1] = round(float(new_grade), 2)
+                                print(f"Assignment {updater} was updated to {round(float(new_grade), 2)} %")
                             else:
-                                print("Invalid assignment number. Please try again.")
+                                print("Invalid input received. Please try again.")
                         
                         elif individual_choice.strip().lower() == "q":
                             break
-                            
+                else:
+                    pass            
                             
         except ValueError:
             print("Invalid student number. Please try again.")
             break
+        
+        else:
+            pass
 
 
 #loop that actually runs the program constantly            
