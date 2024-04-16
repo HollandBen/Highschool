@@ -15,10 +15,11 @@ database.create_table(conn, "Students", ["name 'TEXT'", "assign_1 'REAL'", "assi
 #database.update_db(conn, "Students", ["first_name = 'Mester'", "age = '90'"], "id = '1'")
 
 def fetch():
-    global result, gradebook_list, student_list_length
+    #global result, gradebook_list, student_list_length
     result = database.select_db(conn, "Students").fetchall()
     gradebook_list = [list(ele) for ele in result]
     student_list_length = len(gradebook_list)
+    return gradebook_list,student_list_length
 
 #important variables
 border = "----------------------------------------\n"
@@ -52,7 +53,7 @@ def main_menu():
 
 #simple to get the class mean
 def class_mean():
-    fetch()
+    gradebook_list,student_list_length = fetch()
     class_total = 0
     for i in range(0, student_list_length):
         class_adder = sum(gradebook_list[i][2:])
@@ -162,62 +163,61 @@ def student_menu():
         if student_menu_choice.lower().strip() == "q":
             break
         
-        try:
-            for sublist in gradebook_list: #checks every student in the class
-                if sublist[0] == int(student_menu_choice): #checks the id
-                    while True:
-                        fetch()
-                        print(border)
-                        print(f"Student selected: {sublist[1]}")
-                        print("The recorded grades for this student are:")
-                        for i in range(2, 7):
-                            print(f"Assignment {i-1}: {sublist[i]} %")
-                        print("Enter 'mean' to get this student's average, or enter 'update' to alter one of the assignment grades.\nEnter 'Q' to return to student grade information menu.")
-                        individual_choice = input("> Enter input: ")
-                        
-                        if individual_choice.strip().lower() == "mean":
-                            student_adder = sum(sublist[2:])
-                            try:
-                                student_average = student_adder / 5
-                            except ZeroDivisionError:
-                                student_average = 0
-                            print(border)
-                            print(f"The student's average is: {round(student_average, 2)} %.")
-                
-                        elif individual_choice.strip().lower() == "update":
-                            print(border)
-                            print("Enter the assignment number that should be changed, followed by the updated grade. Use the format: x, xx\nEnter 'Q' to return to this student's menu.")
-                            update_raw = input("> Enter input: ")
-                            if update_raw.lower().strip() == "q":
-                                pass
-                            else:
-                                try:
-                                    updater, new_grade = update_raw.split(", ")
-                                    if int(updater) >= 1 and int(updater) <= 5 and float(new_grade) >= 0 and float(new_grade) <= 115:
-                                        updater_db = f"assign_{updater}"
-                                        database.update_db(conn, "Students", [f"{updater_db} = {round(float(new_grade), 2)}"], f"id = {sublist[0]}")
-                                        sublist[int(updater) + 1] = round(float(new_grade), 2)
-                                        print(f"Assignment {updater} was updated to {round(float(new_grade), 2)} %")
-                                    else:
-                                        print("Invalid input received. Please try again.")
-                                except ValueError:
-                                    print("Invalid input received. Please try again.")
-                                
-                        
-                        elif individual_choice.strip().lower() == "q":
-                            break
-                        
-                        else:
-                            print("Invalid input received. Please try again.") 
-                
-                else:
-                    pass            
-                            
-        except ValueError:
-            print("Invalid student number. Please try again.")
-            
         else:
-            pass
+            try:
+                for sublist in gradebook_list: #checks every student in the class
+                    if sublist[0] == int(student_menu_choice): #checks the id
+                        while True:
+                            fetch()
+                            print(border)
+                            print(f"Student selected: {sublist[1]}")
+                            print("The recorded grades for this student are:")
+                            for i in range(2, 7):
+                                print(f"Assignment {i-1}: {sublist[i]} %")
+                            print("Enter 'mean' to get this student's average, or enter 'update' to alter one of the assignment grades.\nEnter 'Q' to return to student grade information menu.")
+                            individual_choice = input("> Enter input: ")
+                            
+                            if individual_choice.strip().lower() == "mean":
+                                student_adder = sum(sublist[2:])
+                                try:
+                                    student_average = student_adder / 5
+                                except ZeroDivisionError:
+                                    student_average = 0
+                                print(border)
+                                print(f"The student's average is: {round(student_average, 2)} %.")
+                    
+                            elif individual_choice.strip().lower() == "update":
+                                print(border)
+                                print("Enter the assignment number that should be changed, followed by the updated grade. Use the format: x, xx\nEnter 'Q' to return to this student's menu.")
+                                update_raw = input("> Enter input: ")
+                                if update_raw.lower().strip() == "q":
+                                    pass
+                                else:
+                                    try:
+                                        updater, new_grade = update_raw.split(", ")
+                                        if int(updater) >= 1 and int(updater) <= 5 and float(new_grade) >= 0 and float(new_grade) <= 115:
+                                            updater_db = f"assign_{updater}"
+                                            database.update_db(conn, "Students", [f"{updater_db} = {round(float(new_grade), 2)}"], f"id = {sublist[0]}")
+                                            sublist[int(updater) + 1] = round(float(new_grade), 2)
+                                            print(f"Assignment {updater} was updated to {round(float(new_grade), 2)} %")
+                                        else:
+                                            print("Invalid input received. Please try again.")
+                                    except ValueError:
+                                        print("Invalid input received. Please try again.")
+                                    
+                            
+                            elif individual_choice.strip().lower() == "q":
+                                break
+                            
+                            else:
+                                print("Invalid input received. Please try again.") 
+                    
+                    else:
+                        pass            
+                                
+            except ValueError:
+                print("Invalid student number. Please try again.")
+            
 
 
 #loop that actually runs the program constantly            
