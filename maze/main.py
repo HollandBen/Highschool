@@ -15,21 +15,51 @@ WINDOW_HEIGHT = 500
 #Setup of Starting objects
 circ_1_move = 250
 player_char_img = pygame.image.load('maze/images/bumble.jpg') #with .png or .jpb included in the name
-player_char_img = pygame.transform.scale(player_char_img, (150, 100))  #resize image Where 35 ,35 is the size, (x,y)
-player_x = 250
-player_y = 400
+player_char_img = pygame.transform.scale(player_char_img, (45, 30))  #resize image Where 35 ,35 is the size, (x,y)
+player_x = 25
+player_y = 25
 #setting a variable named speed to what we want the speed of the object
-speed = 2
+speed = 1.25
 window = pygame.display.set_mode((WINDOW_WIDTH,WINDOW_HEIGHT), pygame.HWSURFACE)
-pygame.display.set_caption("Test")
+pygame.display.set_caption("Bumblebee maze 1.0")
 def display():
     global player_char, walls
     walls=[]
-    window.fill((255,255,255)) #White background
-    gridHelp(window,WINDOW_WIDTH,WINDOW_HEIGHT)
-    walls.append(pygame.draw.rect(window,(255,255,0),(0,0,100,100)))
-    walls.append(pygame.draw.rect(window,(0,0,0),(20,20,10,30)))
-    walls.append(pygame.draw.circle(window, (0,0,255), (circ_1_move,250), 50))
+    window.fill((52, 207, 35)) #green background
+    #gridHelp(window,WINDOW_WIDTH,WINDOW_HEIGHT)
+    #border walls
+    walls.append(pygame.draw.rect(window,(110, 102, 92),(0,0,20,500))) #left wall
+    walls.append(pygame.draw.rect(window,(110, 102, 92),(0,0,500,20))) #top wall
+    #walls.append(pygame.draw.rect(window,(110, 102, 92),(0,480,500,20))) #bottom wall
+    walls.append(pygame.draw.rect(window,(110, 102, 92),(480,0,20,500))) #right wall
+    #centre fountain
+    walls.append(pygame.draw.circle(window, (108, 107, 112), (250,250), 50)) #outer fountain
+    walls.append(pygame.draw.circle(window, (72, 161, 219), (250,250), 43)) #water
+    walls.append(pygame.draw.circle(window, (108, 107, 112), (250,250), 16)) #fountain pillar
+    #maze walls
+    walls.append(pygame.draw.rect(window,(23, 110, 13),(20,60,100,20))) #hedge
+    walls.append(pygame.draw.rect(window,(23, 110, 13),(200,20,20,130))) #hedge
+    walls.append(pygame.draw.rect(window,(23, 110, 13),(300,140,20,200))) #hedge
+    walls.append(pygame.draw.rect(window,(23, 110, 13),(280,70,140,20))) #hedge
+    walls.append(pygame.draw.rect(window,(23, 110, 13),(320,140,100,20))) #hedge
+    walls.append(pygame.draw.rect(window,(23, 110, 13),(380,220,100,20))) #hedge
+    walls.append(pygame.draw.rect(window,(23, 110, 13),(20,425,260,20))) #hedge
+    walls.append(pygame.draw.rect(window,(23, 110, 13),(340,425,140,20))) #hedge
+    walls.append(pygame.draw.rect(window,(23, 110, 13),(300,340,80,20))) #hedge
+    walls.append(pygame.draw.rect(window,(23, 110, 13),(260,445,20,55))) #hedge
+    walls.append(pygame.draw.rect(window,(23, 110, 13),(340,445,20,55))) #hedge
+    #benches
+    walls.append(pygame.draw.rect(window,(105, 80, 37),(80,130,35,150))) #bench
+    walls.append(pygame.draw.rect(window,(105, 80, 37),(80,340,150,35))) #bench
+    walls.append(pygame.draw.rect(window,(105, 80, 37),(435,260,35,150))) #bench
+    #tree stump
+    walls.append(pygame.draw.circle(window, (69, 51, 21), (350,310), 30)) #stump bark
+    walls.append(pygame.draw.circle(window, (201, 146, 54), (350,310), 25)) #stump inner
+    walls.append(pygame.draw.circle(window, (217, 175, 106), (350,310), 9)) #stump core
+    
+    walls.append(pygame.draw.rect(window,(138, 116, 81),(30,450,220,50))) #dirt
+    walls.append(pygame.draw.rect(window,(138, 116, 81),(370,450,100,50))) #dirt
+    #player
     player_char=window.blit(player_char_img,(player_x, player_y))
 
 
