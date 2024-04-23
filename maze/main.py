@@ -1,5 +1,5 @@
-#Name:
-#Date:
+#Name: Ben Holland
+#Date: 16 April 2024
 #Basic PyGame Setup Code
 import pygame,sys
 
@@ -16,15 +16,19 @@ WINDOW_HEIGHT = 500
 circ_1_move = 250
 player_char_img = pygame.image.load('maze/images/bumble.jpg') #with .png or .jpb included in the name
 player_char_img = pygame.transform.scale(player_char_img, (45, 30))  #resize image Where 35 ,35 is the size, (x,y)
+goal_img = pygame.image.load('maze/images/flower.jpg')
+goal_img = pygame.transform.scale(goal_img, (50, 32))
 player_x = 25
 player_y = 25
+goal_font = pygame.font.SysFont('Comic sans', 60)
 #setting a variable named speed to what we want the speed of the object
 speed = 1.25
 window = pygame.display.set_mode((WINDOW_WIDTH,WINDOW_HEIGHT), pygame.HWSURFACE)
 pygame.display.set_caption("Bumblebee maze 1.0")
 def display():
-    global player_char, walls
+    global player_char, walls, goals
     walls=[]
+    goals=[]
     window.fill((52, 207, 35)) #green background
     #gridHelp(window,WINDOW_WIDTH,WINDOW_HEIGHT)
     #border walls
@@ -61,10 +65,10 @@ def display():
     walls.append(pygame.draw.rect(window,(138, 116, 81),(370,450,100,50))) #dirt
     #player
     player_char=window.blit(player_char_img,(player_x, player_y))
-
-
-
-
+    
+    #goal
+    goals.append(window.blit(goal_img, (285, 465)))
+    #(pygame.draw.rect(window,(255, 255, 255),(305,480,10,10))) #goal
    
 def gridHelp(window,WINDOW_WIDTH,WINDOW_HEIGHT):
         spacer = 20
@@ -80,6 +84,10 @@ def gridHelp(window,WINDOW_WIDTH,WINDOW_HEIGHT):
 def collision(object1, object2):
     return object1.colliderect(object2)
 
+def win():
+    global speed
+    speed = 0
+    window.blit(goal_font.render("You win!", True, (92, 5, 2)), (200, 355))
 
 while True:
     circ_1_move += 2
@@ -106,13 +114,15 @@ while True:
         player_x -= movex
         player_y -= movey
         display()
+    for goal in goals:
+        if collision(player_char,goal):
+            win()
 
     for event in pygame.event.get():
       # if user  QUIT then the screen will close
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
-  
        
     pygame.display.update() #update the display
     fpsClock.tick(fps) #speed of redraw
