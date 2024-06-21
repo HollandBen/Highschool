@@ -21,6 +21,10 @@ def fetch():
     student_list_length = len(gradebook_list)
     return gradebook_list,student_list_length
 
+gradebook_list = fetch()
+print(gradebook_list)
+
+
 #important variables
 border = "----------------------------------------\n"
 
